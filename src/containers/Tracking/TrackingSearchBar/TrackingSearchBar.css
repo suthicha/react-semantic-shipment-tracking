@@ -1,0 +1,12 @@
+.Container {
+    margin-left: auto;
+    margin-right: auto;
+    width: 450px !important;
+}
+.Container 
+.Form {
+    background: #D5DBDB !important;
+}
+.UpperCase input {
+    text-transform: uppercase
+}

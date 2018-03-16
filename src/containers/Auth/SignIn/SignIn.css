@@ -1,0 +1,26 @@
+.SignIn {
+    width: 480px;
+    display: table;
+    margin: 0 auto;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 376px) {
+    .SignIn {
+        width: 80%;
+    }
+}
+
+
+

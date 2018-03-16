@@ -1,0 +1,14 @@
+.Input > .ui {
+    max-width: 100% !important;
+}
+
+.Cell {
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.Row:hover {
+    /* background-color: rgba(0, 0, 0, 0.1); */
+    background-color: rgba(252, 198, 198, 0.671);
+    transition: background 0.5s linear;
+}

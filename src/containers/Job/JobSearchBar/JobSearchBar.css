@@ -1,0 +1,7 @@
+.Container 
+.Form {
+    background: #D5DBDB !important;
+}
+.UpperCase input {
+    text-transform: uppercase
+}
