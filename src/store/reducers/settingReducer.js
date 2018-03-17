@@ -4,7 +4,6 @@ import { updateObject } from '../../shared/utility';
 const initialState = {
     loading: false,
     user: null,
-    company: null,
     error: null
 };
 
@@ -19,9 +18,8 @@ const loadSettingStart = (state, action) => {
 const loadSettingSuccess = (state, action) => {
     return updateObject(state, {
         loading: false, 
-        user: action.user, 
-        company: action.company}
-    )
+        user: action.user
+    })
 };
 
 const loadSettingFail = (state, action) => {

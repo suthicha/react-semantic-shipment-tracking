@@ -31,3 +31,11 @@ export {
 export {
     updateUser
 } from './userAction';
+export {
+    fetchCompany,
+    insertCompany,
+    updateCompany,
+    deleteCompany,
+    addCompanyItem,
+    fetchCompanyFromCache
+} from './companyAction';

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Button, Icon, Table, Input, Checkbox } from 'semantic-ui-react';
+import * as stateType from '../../../store/actions/stateType';
 import classes from './CompanyItemEdit.css';
+import * as actions from '../../../store/actions/index';
 
 class CompanyItemEdit extends Component {
     
@@ -10,35 +13,80 @@ class CompanyItemEdit extends Component {
         branch: '',
         name: '',
         isEdit: false,
-        isDelete: false
+        isDelete: false,
+        hasError: false
     };
 
     componentDidMount(){
-        this.setState({
-            taxno: this.props.data.CmpTaxNo,
-            branch: this.props.data.CmpBranch,
-            name: this.props.data.CmpName
-        });
+        if (this.props.data){
+            this.setState({
+                taxno: this.props.data.CmpTaxNo,
+                branch: this.props.data.CmpBranch,
+                name: this.props.data.CmpName,
+                isEdit: this.props.data.ItemType? true: false
+            });
+        }
+       
+    };
+
+    componentWillReceiveProps(nextProps){
+        
+        if(nextProps.data){
+            if (nextProps.data.error && !this.props.data.error){
+                this.setState({isEdit: true, hasError: true})
+            }
+            if (nextProps.data.triggerValue){
+                this.setState({
+                    taxno: nextProps.data.CmpTaxNo,
+                    branch: nextProps.data.CmpBranch,
+                    name: nextProps.data.CmpName,
+                    hasError: false
+                });
+            }
+        }
+        
     };
 
     onChangeHandler = (event) => {
         event.preventDefault();
         const { id, value } = event.target;
-        this.setState({[id]: value });
+        this.setState({[id]: value.toUpperCase() });
     };
 
     onSwitchModeHandler = () => {
         this.setState({isEdit: !this.state.isEdit})
     };
 
-    onClickSaveHandler = () => {
+    onItemStateChangeHandler = (statetype) => {
         const data = {
-            taxNoValue: this.state.taxno,
+            idValue: this.props.data.CmpID,
+            taxnoValue: this.state.taxno,
             branchValue: this.state.branch,
-            nameValue: this.state.name
+            nameValue: this.state.name,
+            itemType: this.props.data.ItemType
         }
-        this.props.itemValueChanged(data);
-        this.setState({isEdit: false});
+        
+        switch(statetype){
+            case stateType.STATE_INSERT: this.props.onInsertCompany(data); break;
+            case stateType.STATE_UPDATE: this.props.onUpdateCompany(data); break;
+            case stateType.STATE_DELETE: this.props.onDeleteCompany(data); break;
+            default:
+                break;
+        }
+
+        this.setState({isEdit: false, hasError: false});
+    };
+    
+    onClickSaveHandler = () => {
+        const statetype = this.props.data.ItemType
+            ? stateType.STATE_INSERT
+            : stateType.STATE_UPDATE;
+        
+        this.onItemStateChangeHandler(statetype);
+    };
+
+    onClickDeleteHandler = () => {
+        this.onItemStateChangeHandler(stateType.STATE_DELETE);
     };
 
     onClickCancelHandler = () => {
@@ -46,16 +94,16 @@ class CompanyItemEdit extends Component {
             isEdit: false,
             isDelete: false
         });
+
+        if (this.props.data.error || this.props.data.ItemType){
+            const refkey = this.props.data.RefKey;
+            this.props.onTryFetchCompany(refkey);
+        }
     };
 
     toggleCheckboxHandler = (event, data) => {
         event.preventDefault();
         this.setState({isDelete: data.checked});
-    };
-
-    onClickDeleteHandler = () => {
-        console.log('onClickDeleteHandler', 'Delete');
-        this.props.deleteCompleteEvent();
     };
 
     render() {
@@ -77,7 +125,10 @@ class CompanyItemEdit extends Component {
                 <Button.Group size="small">
                     <Button onClick={this.onClickCancelHandler}>Cancel</Button>
                     <Button.Or />
-                    <Button color='google plus' onClick={this.onClickDeleteHandler}>Delete</Button>
+                    <Button 
+                        color='google plus' 
+                        loading={this.props.loading}
+                        onClick={this.onClickDeleteHandler}>Delete</Button>
                 </Button.Group>
             );
         };
@@ -116,6 +167,7 @@ class CompanyItemEdit extends Component {
                             id="taxno" 
                             size="mini" 
                             fluid={true} 
+                            error={this.state.hasError}
                             value={this.state.taxno}
                             onChange={this.onChangeHandler} />
                     </Table.Cell>  
@@ -124,6 +176,7 @@ class CompanyItemEdit extends Component {
                             id="branch"
                             size="mini" 
                             fluid={true}
+                            error={this.state.hasError}
                             value={this.state.branch}
                             onChange={this.onChangeHandler} />
                     </Table.Cell>  
@@ -132,6 +185,7 @@ class CompanyItemEdit extends Component {
                             id="name"
                             size="mini" 
                             fluid={true}
+                            error={this.state.hasError}
                             value={this.state.name}
                             onChange={this.onChangeHandler} />
                     </Table.Cell>  
@@ -139,20 +193,38 @@ class CompanyItemEdit extends Component {
                         <Button.Group size="small">
                             <Button onClick={this.onClickCancelHandler}>Cancel</Button>
                             <Button.Or />
-                            <Button positive onClick={this.onClickSaveHandler}>Save</Button>
+                            <Button 
+                                positive 
+                                loading={this.props.loading}
+                                onClick={this.onClickSaveHandler}>Save</Button>
                         </Button.Group>
                     </Table.Cell>
                 </Table.Row>
             );
-        }
+        };
+
         return row;
     }
 };
 
 CompanyItemEdit.propTypes = {
-    data: PropTypes.object,
-    deleteCompleteEvent: PropTypes.func,
-    itemValueChanged: PropTypes.func,
+    data: PropTypes.object
 };
 
-export default CompanyItemEdit;
+const mapStateToProps = state => {
+    return {
+        loading: state.companyAgent.loading,
+        error: state.companyAgent.error
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onTryFetchCompany: (refkey) => dispatch(actions.fetchCompanyFromCache(refkey)),
+        onUpdateCompany: (company) => dispatch(actions.updateCompany(company)),
+        onDeleteCompany: (company) => dispatch(actions.deleteCompany(company)),
+        onInsertCompany: (company) => dispatch(actions.insertCompany(company))
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CompanyItemEdit);

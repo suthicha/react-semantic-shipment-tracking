@@ -20,9 +20,7 @@ const companyItems = props => {
         return (
         <CompanyItemEdit 
             key={cmp.CmpID} 
-            data={cmp}
-            deleteCompleteEvent={props.deleteItemCompleted}
-            itemValueChanged={props.itemValueChanged} />
+            data={cmp} />
         );
     });
     return rows;
@@ -30,9 +28,7 @@ const companyItems = props => {
 
 companyItems.propTypes = {
     loading: PropTypes.bool,
-    items: PropTypes.array,
-    deleteItemCompleted: PropTypes.func,
-    itemValueChanged: PropTypes.func,
+    items: PropTypes.array
 };
 
 export default companyItems;

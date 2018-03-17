@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Table, Button, Icon } from 'semantic-ui-react';
-import classes from './Company.css';
 import CompanyItems from './CompanyItems/CompanyItems';
+import * as actions from '../../store/actions/index';
+import classes from './Company.css';
 
 class Company extends Component {
 
-    onDeleteItem = () => {
-
-    };
-
-    onUpdateItem = (data) => {
-
+    componentDidMount(){
+        this.props.onFetchCompany();
     };
 
     render(){
@@ -26,16 +24,21 @@ class Company extends Component {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    <CompanyItems 
-                        items={this.props.data} 
-                        deleteItemCompleted={this.onDeleteItem}
-                        itemValueChanged={this.onUpdateItem} />
+                        <CompanyItems 
+                        items={this.props.company} />
+                    
                 </Table.Body>
                 <Table.Footer>
                     <Table.Row>
                         <Table.HeaderCell colSpan='5'>
-                            <Button floated='right' icon labelPosition='left' primary size='small'>
-                                <Icon name='add' /> Add Company
+                            <Button 
+                                icon 
+                                positive
+                                floated='left' 
+                                labelPosition='left' 
+                                size='small' 
+                                onClick={()=> this.props.onAddCompanyItem()}>
+                                    <Icon name='add' />New
                             </Button>
                         </Table.HeaderCell>
                     </Table.Row>
@@ -45,15 +48,24 @@ class Company extends Component {
     }
 };
 
+const mapStateToProps = state => {
+    return {
+        loading: state.companyAgent.loading,
+        company: state.companyAgent.company,
+        error: state.companyAgent.error
+    }
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onFetchCompany: () => dispatch(actions.fetchCompany()),
+        onAddCompanyItem: () => dispatch(actions.addCompanyItem())
+    }
+};
+
 Company.propTypes = {
-    loading: PropTypes.bool.isRequired,
-    data: PropTypes.array,
     deleteItemCompleted: PropTypes.func,
     itemValueChanged: PropTypes.func,
 };
 
-Company.defaultProps = {
-    loading: false,
-}
-
-export default Company;
+export default connect(mapStateToProps, mapDispatchToProps)(Company);

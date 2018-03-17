@@ -1,0 +1,3 @@
+export const STATE_INSERT = 'SPK/STATE_INSERT';
+export const STATE_UPDATE = 'SPK/STATE_UPDATE';
+export const STATE_DELETE = 'SPK/STATE_DELETE';

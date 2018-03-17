@@ -52,7 +52,6 @@ class Settings extends Component {
                             <Divider />
                         </Header>
                         <Company 
-                        data={this.props.company} 
                         deleteItemCompleted={this.onDeleteItemCompleted}
                         itemValueChanged={this.onItemValueChange}
                         />
@@ -66,7 +65,6 @@ class Settings extends Component {
 const mapStateToProps = state => {
     return {
         user: state.settingAgent.user,
-        company: state.settingAgent.company,
         error: state.settingAgent.error,
         loading: state.settingAgent.loading,
         saving: state.userAgent.loading,

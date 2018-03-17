@@ -6,11 +6,10 @@ export const loadSettingStart = () => {
     return { type: actionType.SETTINGS_LOAD_START }
 };
 
-export const loadSettingSuccess = (user, company) => {
+export const loadSettingSuccess = (user) => {
     return {
         type: actionType.SETTINGS_LOAD_SUCCESS,
-        user: user,
-        company: company
+        user: user
     }
 };
 
@@ -32,13 +31,7 @@ export const loadSetting = () => {
         let promise = promiseTimeout(500, axios.get(`/user/${userId}?token=${token}`));
 
         promise.then(res => {
-            
-            promise = promiseTimeout(100, axios.get(`/company/${userId}?token=${token}`));
-            promise.then(cb => {
-                localStorage.setItem('company', JSON.stringify(cb.data.company));
-                dispatch(loadSettingSuccess(res.data.user, cb.data.company));
-            })
-
+            dispatch(loadSettingSuccess(res.data.user));
         })
         .catch(error => {
             dispatch(loadSettingFail(error));
