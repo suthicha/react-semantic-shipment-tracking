@@ -1,19 +1,28 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import SignUpForm from '../../../components/Form/SignUpForm/SignUpForm';
 import { Container, Segment, Header, Icon } from 'semantic-ui-react';
+import SignUpForm from '../../../components/Form/SignUpForm/SignUpForm';
 import classes from './SignUp.css';
 import * as actions from '../../../store/actions/index';
+import * as actionType from '../../../store/actions/actionTypes';
+
+import Notifications from 'react-notification-system-redux';
 
 class SignUp extends Component {
    
+    componentDidMount(){
+        this.context.store.dispatch({ type: actionType.SIGNUP_INIT });
+    };
+
     onSubmitHandler = (data) => {     
         this.props.onRegister(data);
     };
 
     render(){
         const signupFormClasses = this.props.isSuccess? classes.RegisterSuccess: null;
+        const { notifications } = this.props;
 
         let title = "Register Form";
 
@@ -28,6 +37,7 @@ class SignUp extends Component {
 
         return (
             <Container className={classes.Container}>
+                <Notifications notifications={notifications} />
                 <Segment raised>
                     <div className={classes.SignUp}>
                         <Header as='h2' icon textAlign='center'>
@@ -44,16 +54,20 @@ class SignUp extends Component {
                         </div>
                     </div>
                 </Segment>
-                
             </Container>
         );
     }
-}
+};
+
+SignUp.contextTypes = {
+    store: PropTypes.object,
+};
 
 const mapStateToProps = state => {
     return {
         loading: state.signupAgent.loading,
-        isSuccess: state.signupAgent.isSuccess
+        isSuccess: state.signupAgent.isSuccess,
+        notifications: state.notifications
     }
 }
 

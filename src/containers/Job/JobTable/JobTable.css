@@ -32,3 +32,6 @@
     float: right !important;
     padding-bottom: 10px;
 }
+.Title {
+    float: left !important;
+}

@@ -23,3 +23,8 @@
 .FixRightLine {
     box-shadow: none !important;
 }
+
+.Loading {
+    display: table;
+    margin: 185px auto !important;
+}

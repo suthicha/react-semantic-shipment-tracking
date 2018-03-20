@@ -7,10 +7,6 @@ import asyncComponent from './hoc/asyncComponent/asyncComponent';
 import NotFound from './containers/NotFound/NotFound';
 import ProtectedRoute from './hoc/ProtectedRoute/ProtectedRoute';
 
-const asyncDashboard = asyncComponent(() => {
-  return import('./containers/Dashboard/Dashboard');
-});
-
 const asyncSignIn = asyncComponent(() => {
   return import('./containers/Auth/SignIn/SignIn');
 });
@@ -35,22 +31,22 @@ const asyncJob = asyncComponent(() => {
   return import('./containers/Job/Job');
 });
 
-
 class App extends Component {
 
   componentDidMount(){
-    this.props.onTryAutoSignup();
+    this.props.onTryAutoSignup(this.props.location.pathname);
   };
 
   render() {
+    const isAccessible = this.props.isAuthenticated;
+    const locationPathname = this.props.location.pathname;
 
     let routes = (
       <Switch>
           <Route path="/signin" component={asyncSignIn}/>    
           <Route path="/signup" component={asyncSignUp}/>  
-          <Route path="/signout" component={asyncSignOut}/>  
-          <Route path="/" exact component={asyncDashboard}/>
-          <ProtectedRoute isAccessible={this.props.isAuthenticated} redirectToPath="/signin" path="*" component={NotFound} />
+          <Route path="/signout" component={asyncSignOut}/> 
+          <ProtectedRoute redirectToPath="/signin" path="*" component={NotFound} />
       </Switch>
     );
 
@@ -60,10 +56,10 @@ class App extends Component {
             <Route path="/signin" component={asyncSignIn}/>    
             <Route path="/signup" component={asyncSignUp}/>  
             <Route path="/signout" component={asyncSignOut}/>                                    
-            <ProtectedRoute isAccessible={this.props.isAuthenticated} redirectToPath="/signin" path="/tracking" component={asyncTracking}/>
-            <ProtectedRoute isAccessible={this.props.isAuthenticated} redirectToPath="/signin" path="/settings" component={asyncSettings}/>
-            <ProtectedRoute isAccessible={this.props.isAuthenticated} redirectToPath="/signin" path="/booking" component={asyncJob} />            
-            <Route path="/" exact component={asyncDashboard}/>
+            <ProtectedRoute redirectToPath="/signin" path="/tracking" component={asyncTracking}/>
+            <ProtectedRoute redirectToPath="/signin" path="/settings" component={asyncSettings}/>
+            <ProtectedRoute redirectToPath="/signin" path="/booking" component={asyncJob} />            
+            <Route path="/" exact component={asyncTracking}/>
             <Route path="*" component={NotFound} />            
           </Switch>
       );
@@ -71,7 +67,7 @@ class App extends Component {
     
     return (
       <div>
-        <Layout pathname={this.props.location.pathname} isAuth={this.props.isAuthenticated}>
+        <Layout pathname={locationPathname} isAuth={isAccessible}>
           {routes}
         </Layout>
       </div>
@@ -87,7 +83,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onTryAutoSignup: () => dispatch(actions.authCheckState())
+    onTryAutoSignup: (path) => dispatch(actions.authCheckState(path))
   }
 }
 

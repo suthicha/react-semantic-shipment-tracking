@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
-import { Grid } from 'semantic-ui-react';
-import TrackingSearchBar from './TrackingSearchBar/TrackingSearchBar';
-import TrackingTable from './TrackingTable/TrackingTable';
+import { Grid, Loader } from 'semantic-ui-react';
 import * as actions from '../../store/actions/index';
+import TrackingContent from './TrackingContent/TrackingContent';
 import classes from './Tracking.css';
 
 class Tracking extends Component {
@@ -12,22 +11,23 @@ class Tracking extends Component {
         this.props.onFetchTrackingFromState();
     }
 
-    onSearchBarClickedHandler = data => {
-        this.props.onTracking(data);
-    }
-
     render(){
+        let content= (<Loader active className={classes.Loading} inline='centered' size='massive'>Loading...</Loader>);
+
+        if (!this.props.loading){
+            let shipment = null;
+            if (this.props.shipments && this.props.shipments.length > 0){
+                shipment = this.props.shipments[0];
+            }
+            content = <TrackingContent shipment={shipment} />
+        }
+
         return(
             <div className={classes.Tracking}>
                 <Grid widths='equal'>
-                    <Grid.Row>
-                        <Grid.Column>
-                        <TrackingSearchBar loading={this.props.loading} clicked={this.onSearchBarClickedHandler} />
-                        </Grid.Column>
-                    </Grid.Row>
                     <Grid.Row stretched>
                         <Grid.Column className={classes.FixRightLine}>
-                            <TrackingTable loading={this.props.loading} trackingdata={this.props.trackingdata} />
+                            {content}
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
@@ -39,14 +39,13 @@ class Tracking extends Component {
 const mapStateToProps = state => {
     return {
         loading: state.trackingAgent.loading,
-        trackingdata: state.trackingAgent.trackingdata,
+        shipments: state.trackingAgent.shipments,
         error: state.trackingAgent.error
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onTracking: (refno) => dispatch(actions.tracking(refno)),
         onFetchTrackingFromState: () => dispatch(actions.fetchTrackingFromState())
     }
 }

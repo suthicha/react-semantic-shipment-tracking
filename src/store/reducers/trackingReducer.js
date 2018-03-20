@@ -2,17 +2,17 @@ import * as actionTypes from '../actions/actionTypes';
 import { updateObject } from '../../shared/utility';
 
 const initialState = {
-    trackingdata: null,
+    shipments: null,
     loading: false,
     error: null
 };
 
 const trackingSearchStart = (state, action) => {
-    return updateObject(state, { loading: true, trackingdata:null, error: null})
+    return updateObject(state, { loading: true, shipments:null, error: null})
 }
 
 const trackingSearchSuccess = (state, action) => {
-    return updateObject(state, { loading: false, trackingdata: action.trackingdata})
+    return updateObject(state, { loading: false, shipments: action.shipments})
 }
 
 const trackingSearchFail = (state, action) => {

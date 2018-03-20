@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Table, Dimmer, Loader, Input, Form } from 'semantic-ui-react';
+import { Header, Table, Dimmer, Loader, Input, Form } from 'semantic-ui-react';
 import { formatDateToString } from '../../../shared/utility';
 import classes from './JobTable.css';
 import Aux from '../../../hoc/Aux/Aux';
@@ -12,6 +12,7 @@ class JobTable extends Component {
     }
 
     render(){
+        let totalRow = null;
         let rows = null;
 
         if (this.props.loading){
@@ -27,7 +28,7 @@ class JobTable extends Component {
         }
 
         if (this.props.data){
-            
+            totalRow = this.props.data.length.toLocaleString(undefined,{maximumFractionDigits:0}) + ' rec.';
             rows = this.props.data.map((job)=>{
                 const etd = new Date(job.DepartureDate);
                 let rowClass = [classes.Row];
@@ -58,6 +59,11 @@ class JobTable extends Component {
 
         return (
             <Aux>
+                <div className={classes.Title}>
+                    <Header as='h5'>
+                        Result: {totalRow}
+                    </Header>
+                </div>
                 <div className={classes.Search}>
                     <Form size="tiny">
                         <Form.Field>

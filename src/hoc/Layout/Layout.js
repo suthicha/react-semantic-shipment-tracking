@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-import Aux from '../Aux/Aux';
+import PropTypes from 'prop-types';
 import Navbar from '../../components/Navigation/Navbar/Navbar';
+import Aux from '../Aux/Aux';
 import classes from './Layout.css';
 
 class Layout extends Component {
@@ -15,7 +15,7 @@ class Layout extends Component {
     render(){
         return(
             <Aux>
-                <Navbar 
+                <Navbar
                     pathname={this.props.pathname} 
                     isAuth={this.props.isAuth}
                     menuClicked={this.menuClickHandler} />

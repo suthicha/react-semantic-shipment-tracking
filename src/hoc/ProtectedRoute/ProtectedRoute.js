@@ -3,28 +3,21 @@ import PropTypes from "prop-types";
 import { Route, Redirect } from "react-router-dom";
 
 const ProtectedRoute = ({
-    isAccessible,
     redirectToPath,
     component: Component,
     ...rest
-}) => (
-    <Route
-        {...rest}
-        render={props => (
-            isAccessible ?
-                <Component {...props} /> :
-                <Redirect
-                    to={{
-                        pathname: redirectToPath,
-                        state: { from: props.location },
-                    }}
-                />
-        )}
-    />
-);
+}) => {
+    const token = localStorage.getItem('token');
+    return token
+        ? <Route {...rest} render={props => <Component {...props} />} />
+        : <Route {...rest} render={props => <Redirect
+            to={{
+                pathname: redirectToPath,
+                state: { from: props.location },
+            }}/>} />
+};
 
 ProtectedRoute.propTypes = {
-    isAccessible: PropTypes.bool.isRequired,
     redirectToPath: PropTypes.string.isRequired,
     component: PropTypes.func.isRequired,
     location: PropTypes.shape({

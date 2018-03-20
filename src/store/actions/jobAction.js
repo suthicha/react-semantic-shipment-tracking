@@ -1,6 +1,7 @@
 import * as actionType from './actionTypes';
 import axios from '../../axios-local';
 import { promiseTimeout, formatDateToString } from '../../shared/utility';
+import { successAlert, errorAlert } from './notificationAction';
 
 export const jobQueryStart = () => {
     return {
@@ -21,7 +22,6 @@ export const jobQueryFail = (error) => {
         error: error
     }
 };
-
 
 export const jobFilterStart = () => {
     return {
@@ -71,13 +71,12 @@ export const jobQuery = (etd, refno) => {
                         }
                     }
                     localStorage.setItem('jobs', JSON.stringify(jobs));
+                    dispatch(successAlert('Booking', 'Load booking success.'));
                     dispatch(jobQuerySuccess(jobs));
                 });
             }
-
-            
-
         }).catch(err => {
+            dispatch(errorAlert('Booking', err));
             dispatch(jobQueryFail(err));
         })
     }

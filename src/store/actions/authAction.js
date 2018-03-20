@@ -9,13 +9,14 @@ export const authStart = () => {
     };
 };
 
-export const authSuccess = (token, userId, userName, groupId) => {
+export const authSuccess = (token, userId, userName, groupId, path) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
         token: token,
         userId: userId,
         userName: userName,
-        groupId: groupId
+        groupId: groupId,
+        authRedirectPath: path
     };
 };
 
@@ -65,6 +66,8 @@ export const auth = (email, password) => {
 
                     const decoded = jwtDecode(response.data.token);
                     const expirationDate = new Date(decoded.exp * 1000);
+                    const lastPath = localStorage.getItem('lastPath');
+
                     localStorage.setItem('token', response.data.token);
                     localStorage.setItem('userId', decoded.userId);
                     localStorage.setItem('userName', decoded.userName);
@@ -78,7 +81,8 @@ export const auth = (email, password) => {
                             token: response.data.token,
                             userId: decoded.userId,
                             userName: decoded.userName,
-                            groupId: decoded.groupId
+                            groupId: decoded.groupId,
+                            authRedirectPath: lastPath
                         }));
                     dispatch(checkAuthTimeout(expirationTime));
                 }
@@ -96,7 +100,7 @@ export const setAuthRedirectPath = (path) => {
     }
 }
 
-export const authCheckState = () => {
+export const authCheckState = (path) => {
     return dispatch => {
         const token = localStorage.getItem('token');
         
@@ -106,15 +110,15 @@ export const authCheckState = () => {
             const expirationDate = new Date(localStorage.getItem('expirationDate'));
             
             if (expirationDate < new Date()){
-                
                 dispatch(logout());
             }else{
                 const userId = localStorage.getItem('userId');
                 const userName = localStorage.getItem('userName');
                 const groupId = localStorage.getItem('groupId');
-
                 const nextExpirationTime = expirationDate.getTime() - new Date().getTime();
-                dispatch(authSuccess(token, userId, userName, groupId));
+                
+                localStorage.setItem('lastPath', path);
+                dispatch(authSuccess(token, userId, userName, groupId, path));
                 dispatch(checkAuthTimeout(nextExpirationTime));
             }
         }

@@ -39,3 +39,8 @@ export {
     addCompanyItem,
     fetchCompanyFromCache
 } from './companyAction';
+export {
+    successAlert,
+    warningAlert,
+    errorAlert
+} from './notificationAction';

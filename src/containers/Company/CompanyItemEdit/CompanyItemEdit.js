@@ -5,6 +5,7 @@ import { Button, Icon, Table, Input, Checkbox } from 'semantic-ui-react';
 import * as stateType from '../../../store/actions/stateType';
 import classes from './CompanyItemEdit.css';
 import * as actions from '../../../store/actions/index';
+import { warningAlert } from '../../../store/actions/notificationAction';
 
 class CompanyItemEdit extends Component {
     
@@ -58,12 +59,21 @@ class CompanyItemEdit extends Component {
     };
 
     onItemStateChangeHandler = (statetype) => {
+
         const data = {
             idValue: this.props.data.CmpID,
             taxnoValue: this.state.taxno,
             branchValue: this.state.branch,
             nameValue: this.state.name,
             itemType: this.props.data.ItemType
+        }
+
+        if (data.taxnoValue === ""){
+            this.context.store.dispatch(
+                warningAlert('Warning','Please enter company taxno!!!')
+            );
+            this.setState({hasError: true });
+            return;
         }
         
         switch(statetype){
@@ -209,6 +219,10 @@ class CompanyItemEdit extends Component {
 
 CompanyItemEdit.propTypes = {
     data: PropTypes.object
+};
+
+CompanyItemEdit.contextTypes = {
+    store: PropTypes.object
 };
 
 const mapStateToProps = state => {

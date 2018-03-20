@@ -16,14 +16,6 @@ class Settings extends Component {
         this.props.onUpdateUser(data);
     };
 
-    onDeleteItemCompleted = () => {
-        console.log('[Settings]', 'onDeleteItemCompleted')
-    };
-
-    onItemValueChange = (data) => {
-        console.log('[Settings]', data);
-    };
-
     render(){
         
         return (
@@ -49,12 +41,11 @@ class Settings extends Component {
                     <div className={classes.Header}>
                         <Header as='h4'>
                             Your company
-                            <Divider />
                         </Header>
+                        <Divider className={classes.Divider} />
                         <Company 
-                        deleteItemCompleted={this.onDeleteItemCompleted}
-                        itemValueChanged={this.onItemValueChange}
-                        />
+                            deleteItemCompleted={this.onDeleteItemCompleted}
+                            itemValueChanged={this.onItemValueChange} />
                     </div>
                 </Segment>
             </div>

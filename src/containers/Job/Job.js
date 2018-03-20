@@ -7,6 +7,7 @@ import JobTable from './JobTable/JobTable';
 import JobModal from './JobModal/JobModal';
 import Aux from '../../hoc/Aux/Aux';
 import classes from './Job.css';
+import Notifications from 'react-notification-system-redux';
 
 class Job extends Component {
     state = { 
@@ -18,7 +19,9 @@ class Job extends Component {
     handleClose = () => this.setState({ open: true })
 
     componentDidMount(){
+        
         this.props.onFetchJobFromState();
+
     }
 
     componentWillReceiveProps = (nextProps) => {
@@ -79,8 +82,8 @@ class Job extends Component {
         return (
             <Aux>
                 {jobModal}
+                <Notifications notifications={this.props.notifications} />
                 <div className={classes.Job}>
-                    
                     <Grid columns='equal'>
                         <Grid.Row stretched>
                         <Grid.Column>
@@ -91,11 +94,13 @@ class Job extends Component {
                         </Grid.Row>
                         <Grid.Row>
                             <Grid.Column>
-                                <JobTable 
-                                    loading={this.props.loading}
-                                    data={this.props.jobs} 
-                                    rowClicked={this.onRowClickedHandler}
-                                    onSearch={this.searchHandler} />
+                                <Segment>
+                                    <JobTable 
+                                        loading={this.props.loading}
+                                        data={this.props.jobs} 
+                                        rowClicked={this.onRowClickedHandler}
+                                        onSearch={this.searchHandler} />
+                                </Segment>
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
@@ -103,10 +108,11 @@ class Job extends Component {
             </Aux>
         );
     }
-}
+};
 
 const mapStateToProps = state => {
     return {
+        notifications: state.notifications,
         jobs: state.jobAgent.jobs,
         loading: state.jobAgent.loading,
         error: state.jobAgent.error,

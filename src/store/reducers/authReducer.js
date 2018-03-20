@@ -21,6 +21,7 @@ const authSuccess = (state, action) => {
         userId: action.userId,
         userName: action.userName,
         groupId: action.groupId,
+        authRedirectPath: action.authRedirectPath? action.authRedirectPath: '/tracking',
         error: null,
         loading: false
     });

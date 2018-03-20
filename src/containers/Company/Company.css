@@ -1,5 +1,5 @@
 .Table {
-    margin-bottom: 90px !important;
+    margin-bottom: 2px !important;
 }
 
 .HeaderCell {
@@ -10,6 +10,10 @@
 .Cell {
     font-size: 12px;
     cursor: pointer;
+}
+
+.Button {
+    margin-left: -10px !important;
 }
 
 .Row:hover {

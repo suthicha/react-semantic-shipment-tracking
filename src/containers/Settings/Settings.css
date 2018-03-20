@@ -7,6 +7,10 @@
 }
 .Header {
     display: grid;
+    padding: 5px 5px !important;
+}
+.Divider {
+    margin: 0 0 !important;
 }
 
 @keyframes fadeIn {

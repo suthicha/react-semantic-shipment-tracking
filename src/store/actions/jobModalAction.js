@@ -1,6 +1,7 @@
 import * as actionType from './actionTypes';
 import axios from '../../axios-local';
 import { promiseTimeout, formatDateToString } from '../../shared/utility';
+import { successAlert, errorAlert } from './notificationAction';
 
 export const jobModalStart = () => {
     return {
@@ -23,7 +24,6 @@ export const openJobModal = (job) => {
         },500);
     }
 };
-
 
 export const saveJobToTSPool = (job) => {
     return dispatch => {
@@ -75,22 +75,21 @@ export const saveJobToTSPool = (job) => {
                     jobs[index] = updateBooking;
                 }
                 
+                dispatch(successAlert('Booking', 'Save booking success.'));
                 dispatch({type: actionType.JOB_TSPOOL_UPDATE_SUCCESS});
-
                 localStorage.setItem('jobs', JSON.stringify(jobs));
                 
                 setTimeout(()=>{
                     dispatch({type: actionType.JOB_QUERY_SUCCESS, jobs: jobs});
-                },200);
-                
+                },200);  
             }
         })
         .catch(error => {
+            dispatch(errorAlert('Booking', error));
             dispatch({
                 type: actionType.JOB_TSPOOL_UPDATE_FAIL, 
                 error: error
             });
         })
-
     }
 };

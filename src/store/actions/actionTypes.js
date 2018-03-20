@@ -8,6 +8,8 @@ export const SIGNUP_START = 'SPK/SIGNUP_START';
 export const SIGNUP_SUCCESS = 'SPK/SIGNUP_SUCCESS';
 export const SIGNUP_FAIL = 'SPK/SIGNUP_FAIL';
 
+export const SIGNUP_INIT = 'SPK/SIGNUP_INIT';
+
 export const ORDERS_START = 'SPK/ORDERS_START';
 export const ORDERS_SUCCESS = 'SPK/ORDERS_SUCCESS';
 export const ORDERS_FAIL = 'SPK/ORDERS_FAIL';

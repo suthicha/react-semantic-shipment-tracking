@@ -1,16 +1,27 @@
+.MainMenu {
+    background: #fff !important;
+}
+
 .MenuItem a:hover, a:active {
     background: #fff !important;
 }
-.NavbarMenuItem {
+.NavbarMenuItem
+.NavbarMenuItemTracking {
     text-transform: uppercase !important;
     font-size: 14px !important;
     font-weight: 400 !important;
+    padding: 0.4em 1.14em !important;
 }
 
+.NavbarMenuItemTracking input {
+    width: 60%;
+    min-width: 245px;
+}
 .Logo {
     display: block;
     zoom: 2.5;
 }
+
 
 a:hover,
 a:visited {

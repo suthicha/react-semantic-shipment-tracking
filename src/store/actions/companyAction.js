@@ -1,5 +1,6 @@
 import * as actionType from './actionTypes';
 import axios from '../../axios-local';
+import { successAlert, warningAlert, errorAlert } from './notificationAction';
 import { promiseTimeout, guid } from '../../shared/utility';
 
 export const insertCompanyStart = () => {
@@ -98,6 +99,7 @@ export const insertCompany = (data) => {
             }
 
             localStorage.setItem('company', JSON.stringify(company));
+            dispatch(successAlert('Insert Company', 'Company name ' + data.nameValue + ' was added.'));            
             dispatch(fetchCompanySuccess(company));
             dispatch(insertCompanySuccess());
            
@@ -108,6 +110,7 @@ export const insertCompany = (data) => {
                 company[index] = updateCompany;
             }
             localStorage.setItem('company', JSON.stringify(company));
+            dispatch(errorAlert('Insert Company', err));
             dispatch(fetchCompanySuccess(company));
             dispatch(insertCompanyFail(err));
         })
@@ -141,6 +144,7 @@ export const updateCompany = (data) => {
             }
         
             localStorage.setItem('company', JSON.stringify(company));
+            dispatch(successAlert('Update Company','Update company name ' + data.nameValue + ' success.'));
             dispatch(updateCompanySuccess());
             dispatch(fetchCompanySuccess(company));
             
@@ -157,6 +161,7 @@ export const updateCompany = (data) => {
             }
             localStorage.setItem('company', JSON.stringify(company));
 
+            dispatch(errorAlert('Update Company', err));
             dispatch(updateCompanyFail(err));
             dispatch(fetchCompanySuccess(company));
             
@@ -183,6 +188,7 @@ export const deleteCompany = (data) => {
             
             const delItemFromCompany = delCompany(companyItem);
             localStorage.setItem('company', JSON.stringify(delItemFromCompany));
+            dispatch(warningAlert('Delete Company', 'Your company name ' + data.nameValue + ' was deleted.'));            
             dispatch(deleteCompanySuccess());
             dispatch(fetchCompanySuccess(delItemFromCompany));
             
@@ -194,15 +200,16 @@ export const deleteCompany = (data) => {
 
                 const delItemAfterCompanyRESTful = delCompany(companyItem);
                 localStorage.setItem('company', JSON.stringify(delItemAfterCompanyRESTful));
+                dispatch(warningAlert('Delete Company', 'Your company name ' + data.nameValue + ' was deleted.'));
                 dispatch(deleteCompanySuccess());
                 dispatch(fetchCompanySuccess(delItemAfterCompanyRESTful));
 
             })
             .catch(err => {
+                dispatch(errorAlert('Delete Company', err));
                 dispatch(deleteCompanyFail(err));
             })
         }
-        
     }
 };
 
@@ -216,8 +223,10 @@ export const fetchCompany = () => {
             promise.then(res => {
                 localStorage.setItem('company', JSON.stringify(res.data.company));
                 dispatch(fetchCompanySuccess(res.data.company));
+                dispatch(successAlert('Fetch Company','Load company success.'));
             })
             .catch(err => {
+                dispatch(errorAlert('Fetch Company', err));
                 dispatch(fetchCompanyFail(err));
             });
     }
@@ -245,6 +254,7 @@ export const addCompanyItem = () => {
 
         company.push(newItem);
         localStorage.setItem('company', JSON.stringify(company));
+        dispatch(successAlert('Add Company','Add virtual row success.'));
         dispatch(fetchCompanySuccess(company));
         dispatch({type: actionType.COMPANY_ADDITEM_SUCCESS });
     }
@@ -270,9 +280,11 @@ export const fetchCompanyFromCache = (refkey) => {
         };
 
         const index = company.findIndex(q=> q.ItemType === 'NEW' && q.RefKey === refkey);
+        if (index >= 0){
+            company.splice(index,1);
+            dispatch(warningAlert('Removed', 'Cancel your virtual row.'));
+        }
         
-        company.splice(index,1);
-
         localStorage.setItem('company', JSON.stringify(company));
         dispatch(fetchCompanySuccess(company));
 

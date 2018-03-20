@@ -4,9 +4,10 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-
+import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import {reducer as notifications} from 'react-notification-system-redux';
 import authReducer from './store/reducers/authReducer';
 import signupReducer from './store/reducers/signupReducer';
 import ordersReducer from './store/reducers/ordersReducer';
@@ -21,6 +22,7 @@ import companyReducer from './store/reducers/companyReducer';
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
 const rootReducer = combineReducers({
+    notifications,
     authAgent: authReducer,
     signupAgent: signupReducer,
     ordersAgent: ordersReducer,

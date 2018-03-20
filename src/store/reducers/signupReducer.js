@@ -24,6 +24,7 @@ const signupFail = (state, action) => {
 
 const reducer = (state = initialState, action) => {
     switch(action.type){
+        case actionTypes.SIGNUP_INIT: return initialState;
         case actionTypes.SIGNUP_START: return signupStart(state, action);
         case actionTypes.SIGNUP_SUCCESS: return signupSuccess(state, action);
         case actionTypes.SIGNUP_FAIL: return signupFail(state, action);
