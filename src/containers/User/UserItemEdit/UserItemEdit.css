@@ -1,0 +1,36 @@
+.Input > .ui {
+    max-width: 100% !important;
+}
+
+.Cell {
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.Row:hover {
+    /* background-color: rgba(0, 0, 0, 0.1); */
+    background-color: rgba(252, 198, 198, 0.671);
+    transition: background 0.5s linear;
+}
+
+.ResetPassword {
+    margin: 10px;
+}
+.ResetPassword input {
+    width: 280px !important;
+}
+
+.Row {
+    animation: FadeInDown ease 0.5s;
+}
+
+@keyframes FadeInDown{
+    0% {
+      opacity:0;
+      transform:  translate(0px,-25px)  ;
+    }
+    100% {
+      opacity:1;
+      transform:  translate(0px,0px)  ;
+    }
+}

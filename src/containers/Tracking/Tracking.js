@@ -8,7 +8,7 @@ import classes from './Tracking.css';
 class Tracking extends Component {
 
     componentDidMount(){
-        this.props.onFetchTrackingFromState();
+        // this.props.onFetchTrackingFromState();
     }
 
     render(){
@@ -19,7 +19,7 @@ class Tracking extends Component {
             if (this.props.shipments && this.props.shipments.length > 0){
                 shipment = this.props.shipments[0];
             }
-            content = <TrackingContent shipment={shipment} />
+            content = <TrackingContent shipment={shipment} refno={this.props.refno} />
         }
 
         return(
@@ -40,6 +40,7 @@ const mapStateToProps = state => {
     return {
         loading: state.trackingAgent.loading,
         shipments: state.trackingAgent.shipments,
+        refno: state.trackingAgent.refno,
         error: state.trackingAgent.error
     }
 }

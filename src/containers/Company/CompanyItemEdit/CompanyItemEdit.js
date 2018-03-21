@@ -27,7 +27,6 @@ class CompanyItemEdit extends Component {
                 isEdit: this.props.data.ItemType? true: false
             });
         }
-       
     };
 
     componentWillReceiveProps(nextProps){

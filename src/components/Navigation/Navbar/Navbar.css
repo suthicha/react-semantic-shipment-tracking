@@ -21,7 +21,15 @@
     display: block;
     zoom: 2.5;
 }
-
+.Level {
+    display: none !important;
+}
+.Button {
+    line-height: 1.2em !important;
+}
+.Item {
+    margin: 0em 0em !important;
+}
 
 a:hover,
 a:visited {

@@ -5,7 +5,7 @@ const initialState = {
     token: null,
     userId: null,
     userName: null,
-    groupId: null,
+    groupId: 1,
     error: null,
     loading: false,
     authRedirectPath: '/'

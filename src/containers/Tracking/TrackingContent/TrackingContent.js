@@ -1,12 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Segment, Step, Icon, Table, Message } from 'semantic-ui-react';
+import { Header, Segment, Step, Icon, Table, Message } from 'semantic-ui-react';
 import { formatDateToString } from '../../../shared/utility';
+import classes from './TrackingContent.css';
 
 const trackingContent = props => {
 
     if (!props.shipment){
-        return <h2>Find not found...</h2>
+
+        return (
+            <div>
+                <Segment className={classes.Segment}>
+                    <Header as='h2'>
+                        <Icon name='search' />
+                        <Header.Content color="red">
+                        Tracking Alert
+                        <Header.Subheader>
+                            {props.refno? "Find not found refno "+ props.refno + ".":"Please enter your reference."}
+                        </Header.Subheader>
+                        </Header.Content>
+                    </Header>
+                </Segment>
+            </div>
+        );
     }
     const { shipment } = props;
     const arrivalDate = formatDateToString(shipment.ArrivalDate,'-');
@@ -33,25 +49,25 @@ const trackingContent = props => {
             <div>
             <Step.Group attached='top'>
             <Step>
-                <Icon name='truck' />
+                <Icon name='search' />
                 <Step.Content>
-                <Step.Title>Shipping</Step.Title>
-                <Step.Description>Choose your shipping options</Step.Description>
+                <Step.Title>Your reference</Step.Title>
+                <Step.Description>{props.refno}</Step.Description>
+                </Step.Content>
+            </Step>
+
+            <Step>
+                <Icon name='folder open outline' />
+                <Step.Content>
+                <Step.Title>JobNo.</Step.Title>
+                <Step.Description>{shipment.JobNo}</Step.Description>
                 </Step.Content>
             </Step>
 
             <Step active>
-                <Icon name='payment' />
+                <Icon name='bookmark outline' />
                 <Step.Content>
-                <Step.Title>Billing</Step.Title>
-                <Step.Description>Enter billing information</Step.Description>
-                </Step.Content>
-            </Step>
-
-            <Step disabled>
-                <Icon name='info' />
-                <Step.Content>
-                <Step.Title>Confirm Order</Step.Title>
+                    <Step.Title>{shipment.OBL}</Step.Title>
                 </Step.Content>
             </Step>
             </Step.Group>
@@ -73,6 +89,11 @@ const trackingContent = props => {
                             <Table.Cell>Booking No. / CarrierBooking No.</Table.Cell>
                             <Table.Cell>{shipment.BookingNo}</Table.Cell>
                             <Table.Cell>{shipment.CarrierBookingNo}</Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                            <Table.Cell>Container No.</Table.Cell>
+                            <Table.Cell>{shipment.ContainerNo}</Table.Cell>
+                            <Table.Cell></Table.Cell>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell>Shipper</Table.Cell>

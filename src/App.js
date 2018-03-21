@@ -31,6 +31,10 @@ const asyncJob = asyncComponent(() => {
   return import('./containers/Job/Job');
 });
 
+const asyncUser = asyncComponent(() => {
+  return import('./containers/User/User');
+});
+
 class App extends Component {
 
   componentDidMount(){
@@ -38,6 +42,7 @@ class App extends Component {
   };
 
   render() {
+    const groupId = this.props.groupId;
     const isAccessible = this.props.isAuthenticated;
     const locationPathname = this.props.location.pathname;
 
@@ -51,23 +56,52 @@ class App extends Component {
     );
 
     if (this.props.isAuthenticated){
-      routes = (
-          <Switch>
-            <Route path="/signin" component={asyncSignIn}/>    
-            <Route path="/signup" component={asyncSignUp}/>  
-            <Route path="/signout" component={asyncSignOut}/>                                    
-            <ProtectedRoute redirectToPath="/signin" path="/tracking" component={asyncTracking}/>
-            <ProtectedRoute redirectToPath="/signin" path="/settings" component={asyncSettings}/>
-            <ProtectedRoute redirectToPath="/signin" path="/booking" component={asyncJob} />            
-            <Route path="/" exact component={asyncTracking}/>
-            <Route path="*" component={NotFound} />            
-          </Switch>
-      );
-    }
+      
+      if (groupId === 9){
+          routes = (
+              <Switch>
+                <Route path="/signin" component={asyncSignIn}/>    
+                <Route path="/signup" component={asyncSignUp}/>  
+                <Route path="/signout" component={asyncSignOut}/>                                    
+                <ProtectedRoute redirectToPath="/signin" path="/tracking" component={asyncTracking}/>
+                <ProtectedRoute redirectToPath="/signin" path="/settings" component={asyncSettings}/>
+                <ProtectedRoute redirectToPath="/signin" path="/users" component={asyncUser}/>                
+                <ProtectedRoute redirectToPath="/signin" path="/booking" component={asyncJob} />            
+                <Route path="/" exact component={asyncTracking}/>
+                <Route path="*" component={NotFound} />            
+              </Switch>
+          );
+      } else if (groupId === 2) {
+          routes = (
+            <Switch>
+              <Route path="/signin" component={asyncSignIn}/>    
+              <Route path="/signup" component={asyncSignUp}/>  
+              <Route path="/signout" component={asyncSignOut}/>                                    
+              <ProtectedRoute redirectToPath="/signin" path="/tracking" component={asyncTracking}/>
+              <ProtectedRoute redirectToPath="/signin" path="/settings" component={asyncSettings}/>
+              <ProtectedRoute redirectToPath="/signin" path="/booking" component={asyncJob} />            
+              <Route path="/" exact component={asyncTracking}/>
+              <Route path="*" component={NotFound} />            
+            </Switch>
+          );
+      } else {
+          routes = (
+            <Switch>
+              <Route path="/signin" component={asyncSignIn}/>    
+              <Route path="/signup" component={asyncSignUp}/>  
+              <Route path="/signout" component={asyncSignOut}/>                                    
+              <ProtectedRoute redirectToPath="/signin" path="/tracking" component={asyncTracking}/>
+              <ProtectedRoute redirectToPath="/signin" path="/settings" component={asyncSettings}/>
+              <Route path="/" exact component={asyncTracking}/>
+              <Route path="*" component={NotFound} />            
+            </Switch>
+          );
+      }
+    };
     
     return (
       <div>
-        <Layout pathname={locationPathname} isAuth={isAccessible}>
+        <Layout pathname={locationPathname} isAuth={isAccessible} groupId={groupId}>
           {routes}
         </Layout>
       </div>
@@ -77,6 +111,7 @@ class App extends Component {
 
 const mapStateToProps = state => {
   return {
+    groupId: state.authAgent.groupId,
     isAuthenticated: state.authAgent.token !== null
   }
 }

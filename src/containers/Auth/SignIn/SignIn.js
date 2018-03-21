@@ -23,7 +23,7 @@ class SignIn extends Component {
             {authRedirect}
             <Segment raised>
                 <Header as='h2' icon textAlign='center'>
-                    <Icon name='users' circular />
+                    <Icon name='ship' circular color="blue" />
                     <Header.Content>
                         Sign In
                     </Header.Content>

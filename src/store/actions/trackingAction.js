@@ -9,10 +9,11 @@ export const trackingSearchStart = () => {
     }
 }
 
-export const trackingSearchSuccess = (data) => {
+export const trackingSearchSuccess = (data, refno) => {
     return {
         type: actionTypes.TRACKING_SEARCH_SUCCESS,
-        shipments: data
+        shipments: data,
+        refno: refno
     }
 }
 
@@ -32,13 +33,14 @@ export const tracking = (refno) => {
         const promise = promiseTimeout(500, axios.get(`/tracking/${userId}/${refno}?token=${token}`));
 
         promise.then(res => {
-            localStorage.setItem('shipments', JSON.stringify(res.data.shipments));
-            dispatch(trackingSearchSuccess(res.data.shipments));
+            // localStorage.setItem('shipments', JSON.stringify(res.data.shipments));
+            dispatch(trackingSearchSuccess(res.data.shipments, refno));
             dispatch(successAlert('Tracking', 'Found ' + refno));
             
         })
         .catch(error => {
             dispatch(errorAlert('Tracking', error));
+            error.refno = refno;
             dispatch(trackingSearchFail(error));
         })
         
@@ -50,8 +52,7 @@ export const fetchTrackingFromState = () => {
         dispatch(trackingSearchStart());
         setTimeout(()=> {
             try {
-                const shipments = JSON.parse(localStorage.getItem('shipments'));
-                dispatch(trackingSearchSuccess(shipments));
+                dispatch(trackingSearchSuccess(null));
             }catch(e){}
             
         }, 500);

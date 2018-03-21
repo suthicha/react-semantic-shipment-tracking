@@ -1,5 +1,33 @@
+.User {
+    width: 85%;
+    margin: 0 auto;
+    display: table;
+    animation: fadeIn 0.3s;
+    padding-bottom: 45px;
+}
+
+.Header {
+    display: grid;
+    padding: 5px 5px !important;
+}
+
+.Divider {
+    margin: 0 0 !important;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 .Table {
-    margin-bottom: 90px !important;
+    margin-bottom: 2px !important;
 }
 
 .HeaderCell {
@@ -11,8 +39,9 @@
     font-size: 12px;
     cursor: pointer;
 }
-.Row {
-    animation: FadeInDown ease 1s;
+
+.Button {
+    margin-left: -10px !important;
 }
 
 .Row:hover {
@@ -29,23 +58,4 @@
 .ActiveItem {
     background-color: #82E0AA;
     transition: background 0.5s linear;
-}
-
-.Search {
-    float: right !important;
-    padding-bottom: 10px;
-}
-.Title {
-    float: left !important;
-}
-
-@keyframes FadeInDown{
-    0% {
-      opacity:0;
-      transform:  translate(0px,-25px)  ;
-    }
-    100% {
-      opacity:1;
-      transform:  translate(0px,0px)  ;
-    }
 }

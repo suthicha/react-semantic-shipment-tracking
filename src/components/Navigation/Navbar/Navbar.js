@@ -1,20 +1,30 @@
 import React from 'react';
 import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
-import { Menu, Button } from 'semantic-ui-react';
+import { Menu, Button, Icon } from 'semantic-ui-react';
 import TrackingForm from '../../Form/TrackingForm/TrackingForm';
 import classes from './Navbar.css';
 import logo from '../../../assets/cti_logo.png';
 import './Navbar.css';
 
 const navbar = props => {
+    let menuItemClasses = [classes.NavbarMenuItem];
+
+    if (props.groupId < 2 || props.groupId !== 9){
+        menuItemClasses = [classes.NavbarMenuItem, classes.Level];
+    }
+
     let menuItems = (
         <Menu.Menu position="right">
-            <Menu.Item>
-                <Button positive onClick={(event)=> props.menuClicked(event, '/signup')}>Sign Up</Button>
+            <Menu.Item className={classes.Item}>
+                <Button icon positive onClick={(event)=> props.menuClicked(event, '/signup')} className={classes.Button}>
+                <Icon name="podcast" size="large" />
+                Register</Button>
             </Menu.Item>
-            <Menu.Item>
-                <Button onClick={(event)=> props.menuClicked(event, '/signin')}>Sign In</Button>
+            <Menu.Item className={classes.Item}>
+                <Button icon onClick={(event)=> props.menuClicked(event, '/signin')} className={classes.Button}>
+                <Icon name="lock" size="large" color="orange" />
+                Sign In</Button>
             </Menu.Item>
         </Menu.Menu>
     );
@@ -25,17 +35,25 @@ const navbar = props => {
                 <Menu.Item className={classes.NavbarMenuItemTracking}>
                     <TrackingForm />
                 </Menu.Item>
-                {/* <Menu.Item active={props.pathname === '/tracking'} className={classes.NavbarMenuItem}>
-                    <Link to="/tracking">Tracking</Link>
-                </Menu.Item> */}
-                <Menu.Item active={props.pathname === '/booking'} className={classes.NavbarMenuItem}>
-                    <Link to="/booking">Booking</Link>
+                <Menu.Item active={props.pathname === '/booking'} className={menuItemClasses.join(' ')}>
+                    <Link to="/booking">
+                        <Icon name="unordered list" size="large" />
+                    Booking</Link>
+                </Menu.Item>
+                <Menu.Item active={props.pathname === '/user'} className={menuItemClasses.join(' ')}>
+                    <Link to="/users">
+                    <Icon name="users" size="large" />
+                    Users</Link>
                 </Menu.Item>
                 <Menu.Item active={props.pathname === '/settings'} className={classes.NavbarMenuItem}>
-                    <Link to="/settings">Settings</Link>
+                    <Link to="/settings">
+                        <Icon name="setting" size="large" />
+                    Settings</Link>
                 </Menu.Item>
                 <Menu.Item>
-                    <Button color="google plus" onClick={(event) => props.menuClicked(event, '/signout')}>Sign Out</Button>
+                    <Button icon color="google plus" onClick={(event) => props.menuClicked(event, '/signout')} className={classes.Button}>
+                    <Icon name="sign out" size="large" />
+                    Sign Out</Button>
                 </Menu.Item>
             </Menu.Menu>
         );

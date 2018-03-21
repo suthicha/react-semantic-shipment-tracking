@@ -29,7 +29,11 @@ export {
     loadSetting
 } from './settingAction';
 export {
-    updateUser
+    updateUser,
+    updateUserByRef,
+    deleteUserByRef,
+    selectUsers,
+    resetUserPassword
 } from './userAction';
 export {
     fetchCompany,

@@ -136,7 +136,7 @@ class SignUpForm extends Component {
                 </Form.Group>
                 </div>
                 <div>
-                    <Button type="submit" primary loading={this.props.loading}>
+                    <Button type="submit" color="green" loading={this.props.loading}>
                     {
                         this.props.isUpdate
                         ? "Update"

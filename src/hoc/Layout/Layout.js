@@ -18,6 +18,7 @@ class Layout extends Component {
                 <Navbar
                     pathname={this.props.pathname} 
                     isAuth={this.props.isAuth}
+                    groupId={this.props.groupId}
                     menuClicked={this.menuClickHandler} />
                 <div className={classes.Content}>
                     {this.props.children}
@@ -31,10 +32,12 @@ Layout.propTypes = {
     pathname: PropTypes.string.isRequired,
     isAuth: PropTypes.bool.isRequired,
     children: PropTypes.object.isRequired,
+    groupId: PropTypes.number.isRequired,
 };
 
 Layout.defaultProps = {
     isAuth: false,
+    groupId: 1,
 }
 
 export default withRouter(Layout);

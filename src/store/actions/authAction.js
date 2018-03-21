@@ -34,7 +34,9 @@ export const logout = () => {
     localStorage.removeItem('groupId');
     localStorage.removeItem('expirationDate');
     localStorage.removeItem('jobs');
-    localStorage.removeItem('trackingdata');
+    localStorage.removeItem('shipments');
+    localStorage.removeItem('company');
+    localStorage.removeItem('lastPath');
 
     return {
         type: actionTypes.AUTH_LOGOUT
@@ -76,14 +78,12 @@ export const auth = (email, password) => {
 
                     const current_time = new Date().getTime();
                     const expirationTime = expirationDate.getTime() - current_time;
-                    dispatch(authSuccess(
-                        {
-                            token: response.data.token,
-                            userId: decoded.userId,
-                            userName: decoded.userName,
-                            groupId: decoded.groupId,
-                            authRedirectPath: lastPath
-                        }));
+                    dispatch(authSuccess(response.data.token,
+                            decoded.userId,
+                            decoded.userName,
+                            decoded.groupId,
+                            lastPath
+                        ));
                     dispatch(checkAuthTimeout(expirationTime));
                 }
             })
@@ -114,7 +114,7 @@ export const authCheckState = (path) => {
             }else{
                 const userId = localStorage.getItem('userId');
                 const userName = localStorage.getItem('userName');
-                const groupId = localStorage.getItem('groupId');
+                const groupId = Number.parseInt(localStorage.getItem('groupId'), 10);
                 const nextExpirationTime = expirationDate.getTime() - new Date().getTime();
                 
                 localStorage.setItem('lastPath', path);
