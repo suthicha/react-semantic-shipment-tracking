@@ -22,8 +22,8 @@ const navbar = props => {
                 Register</Button>
             </Menu.Item>
             <Menu.Item className={classes.Item}>
-                <Button icon onClick={(event)=> props.menuClicked(event, '/signin')} className={classes.Button}>
-                <Icon name="lock" size="large" color="orange" />
+                <Button icon onClick={(event)=> props.menuClicked(event, '/signin')} className={classes.Button} color="blue">
+                <Icon name="user" size="large" />
                 Sign In</Button>
             </Menu.Item>
         </Menu.Menu>

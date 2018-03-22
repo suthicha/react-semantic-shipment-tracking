@@ -1,7 +1,7 @@
 import * as actionType from './actionTypes';
 import axios from '../../axios-local';
 import { successAlert, warningAlert, errorAlert } from './notificationAction';
-import { promiseTimeout, guid } from '../../shared/utility';
+import { promiseTimeout, guid, randomNumber } from '../../shared/utility';
 
 export const insertCompanyStart = () => {
     return { type: actionType.COMPANY_INSERT_START }
@@ -236,11 +236,11 @@ export const addCompanyItem = () => {
     return dispatch => {
         dispatch({type: actionType.COMPANY_ADDITEM_START});
         const userId = localStorage.getItem('userId');
-        const randNumber = Math.floor(Math.random() * 99999) + Math.floor(Math.random());
+        // const randNumber = Math.floor(Math.random() * 99999) + Math.floor(Math.random());
         let company = JSON.parse(localStorage.getItem('company'));
 
         let newItem = {
-            CmpID: randNumber * (-1),
+            CmpID: randomNumber() * (-1),
             CmpName: '',
             CmpTaxNo: '',
             CmpBranch: '',

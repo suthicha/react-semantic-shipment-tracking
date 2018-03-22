@@ -30,10 +30,13 @@ export {
 } from './settingAction';
 export {
     updateUser,
+    addUserItem,
     updateUserByRef,
     deleteUserByRef,
+    insertUserByRef,
     selectUsers,
-    resetUserPassword
+    resetUserPassword,
+    fetchUsersFromCache
 } from './userAction';
 export {
     fetchCompany,

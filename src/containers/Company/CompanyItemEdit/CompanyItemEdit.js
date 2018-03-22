@@ -122,7 +122,7 @@ class CompanyItemEdit extends Component {
                 floated='right' 
                 icon 
                 labelPosition='left' 
-                color='google plus' 
+                color='orange' 
                 size='small'
                 onClick={this.onSwitchModeHandler}>
                 <Icon name='edit' /> Edit

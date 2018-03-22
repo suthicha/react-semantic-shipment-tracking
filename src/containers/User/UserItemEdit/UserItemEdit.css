@@ -24,6 +24,10 @@
     animation: FadeInDown ease 0.5s;
 }
 
+.NewRow {
+    background: rgba(0, 0, 0, 0.075) !important;
+}
+
 @keyframes FadeInDown{
     0% {
       opacity:0;

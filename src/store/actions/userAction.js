@@ -1,6 +1,6 @@
 import * as actionType from './actionTypes';
 import axios from '../../axios-local';
-import { promiseTimeout } from '../../shared/utility';
+import { promiseTimeout, guid, randomNumber } from '../../shared/utility';
 import { successAlert, errorAlert, warningAlert } from './notificationAction';
 
 export const updateUserStart = () => {
@@ -81,6 +81,17 @@ export const adminDeleteUserFail = (error) => {
     }
 };
 
+export const adminInsertUserStart = () => {
+    return { type: actionType.ADMIN_INSERT_USER_START }
+};
+
+export const adminInsertUserSuccess = () => {
+    return { type: actionType.ADMIN_INSERT_USER_SUCCESS }
+};
+
+export const adminInsertUserFail = (error) => {
+    return { type: actionType.ADMIN_INSERT_USER_FAIL, error: error }
+};
 
 export const updateUser = (user) => {
     return dispatch => {
@@ -138,7 +149,6 @@ export const resetUserPassword = (userId, newPassword) => {
             UserID: userId,
             NewPassword: newPassword
         };
-        console.log('[resetUserPassword]', data);
 
         const token = localStorage.getItem('token');
         const promise = promiseTimeout(500, axios.patch(`/user/recovery?token=${token}`, data));
@@ -178,6 +188,17 @@ export const updateUserByRef = (user) => {
 
         })
         .catch(err => {
+
+            if (index >= 0){
+                const oldUser = users[index];
+                const updateUser = {...users[index], 
+                    ...user, 
+                    oldValue: {...oldUser},
+                    error: err};
+                users[index] = updateUser;
+            }
+
+            localStorage.setItem('users', JSON.stringify(users));
             dispatch(errorAlert('Update User', err));
             dispatch(adminUpdateUserFail(err));
         });
@@ -216,4 +237,91 @@ export const deleteUserByRef = (user) => {
             })
         }
     };
+};
+
+export const insertUserByRef = (user) => {
+    return dispatch => {
+        dispatch(adminInsertUserStart());
+        const promise = promiseTimeout(500, axios.post(`/user/signup`, user));
+        
+        let users = JSON.parse(localStorage.getItem('users'));
+        const index = users.findIndex(q => q.UserID === user.UserID);
+
+        promise.then(res => {
+
+            if (index >= 0){
+                const updateUser = {...users[index], ...res.data.users[0], ItemType: null};
+                users[index] = updateUser;
+            }
+
+            localStorage.setItem('users', JSON.stringify(users));
+            dispatch(successAlert('Add User','Account name '+ user.LoginName +' was registered.'));
+            dispatch(adminInsertUserSuccess());
+            dispatch(selectUserSuccess(users));
+        })
+        .catch(err => {
+            if (index >= 0){
+                const updateUser = {...users[index], ...user, ItemType: 'NEW', error: err};
+                users[index] = updateUser;
+            }
+            localStorage.setItem('users', JSON.stringify(users));
+            dispatch(errorAlert('Add User', err));
+            dispatch(adminInsertUserFail(err));
+            dispatch(selectUserSuccess(users));
+        });
+    }
+};
+
+
+export const addUserItem = () => {
+    return dispatch => {
+        let users = JSON.parse(localStorage.getItem('users'));
+        const user = {
+            UserID: randomNumber() * -1,
+            LoginName: '',
+            Password: '',
+            FirstName: '',
+            LastName: '',
+            Email: '',
+            PhoneNO: '',
+            UserGroupID: 1,
+            ItemType: 'NEW',
+            RefKey: guid(),
+            error: null
+        }
+
+        users.push(user);
+        localStorage.setItem('users', JSON.stringify(users));
+        dispatch(selectUserSuccess(users));
+        dispatch(successAlert('Add User', 'Add user item is done.'));
+    }
+};
+
+export const fetchUsersFromCache = (refkey) => {
+    return dispatch => {
+        let users = JSON.parse(localStorage.getItem('users'));
+
+        for(var i=0; i < users.length;i++){
+            if (users[i].oldValue){
+                const oldValue = users[i].oldValue;
+                const fields = Object.keys(oldValue);
+                for(var j=0; j < fields.length; j++){
+                    const fieldName = fields[j];
+                    users[i][fieldName]= oldValue[fieldName];
+                }
+                users[i].oldValue=null;
+                users[i].error=null;
+                users[i].triggerValue = true;
+            }
+        };
+
+        const index = users.findIndex(q=> q.ItemType === 'NEW' && q.RefKey === refkey);
+        if (index >= 0){
+            users.splice(index,1);
+            dispatch(warningAlert('Removed', 'Cancel your new account.'));
+        }
+        
+        localStorage.setItem('users', JSON.stringify(users));
+        dispatch(selectUserSuccess(users));
+    }
 };

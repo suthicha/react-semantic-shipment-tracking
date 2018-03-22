@@ -91,6 +91,18 @@ const adminDeleteUserFail = (state, action) => {
     return updateObject(state, { itemProcessing: false, itemError: action.error })
 };
 
+const adminInsertUserStart = (state, action) => {
+    return updateObject(state, { itemProcessing: true, isSuccess: false, itemError: null })
+};
+
+const adminInsertUserSuccess = (state, action) => {
+    return updateObject(state, { itemProcessing: false, isSuccess: true, itemError: null});
+};
+
+const adminInsertUserFail = (state, action) => {
+    return updateObject(state, { itemProcessing: false, isSuccess: false, itemError: action.error })
+};
+
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
@@ -110,6 +122,9 @@ const reducer = (state = initialState, action) => {
         case actionType.ADMIN_DELETE_USER_START: return adminDeleteUserStart(state, action);
         case actionType.ADMIN_DELETE_USER_SUCCESS: return adminDeleteUserSuccess(state, action);
         case actionType.ADMIN_DELETE_USER_FAIL: return adminDeleteUserFail(state, action);
+        case actionType.ADMIN_INSERT_USER_START: return adminInsertUserStart(state, action);
+        case actionType.ADMIN_INSERT_USER_SUCCESS: return adminInsertUserSuccess(state, action);
+        case actionType.ADMIN_INSERT_USER_FAIL: return adminInsertUserFail(state, action);
         default:
             return state;
     }

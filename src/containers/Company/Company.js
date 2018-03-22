@@ -16,7 +16,15 @@ class Company extends Component {
 
     
     render(){
-        const {notifications} = this.props;
+        const {notifications, company } = this.props;
+        const hasNewRow = () => {
+            if (company){
+                return company.filter(q => q.ItemType === 'NEW').length > 0;
+            }else {
+                return false;
+            }
+        }
+
         return(
             <Aux>
                 <Notifications notifications={notifications} />
@@ -37,11 +45,12 @@ class Company extends Component {
                             <Table.HeaderCell colSpan='5'>
                                 <Button 
                                     icon 
-                                    positive
                                     floated='left' 
                                     labelPosition='left' 
                                     size='small' 
+                                    disabled={hasNewRow()}
                                     className={classes.Button}
+                                    color={hasNewRow()? "grey":"green"}
                                     onClick={()=> this.props.onAddCompanyItem()}>
                                         <Icon name='add' />New
                                 </Button>

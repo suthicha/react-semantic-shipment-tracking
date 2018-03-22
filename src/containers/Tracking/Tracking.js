@@ -8,7 +8,7 @@ import classes from './Tracking.css';
 class Tracking extends Component {
 
     componentDidMount(){
-        // this.props.onFetchTrackingFromState();
+        this.props.onFetchTrackingFromState();
     }
 
     render(){

@@ -7,12 +7,22 @@ import * as actions from '../../store/actions/index';
 import Notifications from 'react-notification-system-redux';
 
 class User extends Component {
-
+    
     componentDidMount(){
         this.props.onSelectUsers();
     }
 
     render() {
+        const { users } = this.props;
+
+        const hasNewRow = () => {
+            if (users){
+                return users.filter(q => q.ItemType === 'NEW').length > 0;
+            } else {
+                return false;
+            }
+        };
+
         return (
             <div className={classes.User}>
                 <Notifications notifications={this.props.notifications} />
@@ -42,13 +52,14 @@ class User extends Component {
                             <Table.Row>
                                 <Table.HeaderCell colSpan='10'>
                                     <Button 
-                                        icon 
-                                        positive
+                                        icon
                                         floated='left' 
                                         labelPosition='left' 
                                         size='small' 
+                                        color={hasNewRow()?"grey":"green"}
                                         className={classes.Button}
-                                        onClick={()=> this.props.onAddCompanyItem()}>
+                                        disabled={hasNewRow()}
+                                        onClick={()=> this.props.onAddUserItem()}>
                                             <Icon name='add' />New
                                     </Button>
                                 </Table.HeaderCell>
@@ -72,7 +83,8 @@ const mapStateToProps = state => {
 
 const mapDistpatchToProps = dispatch => {
     return {
-        onSelectUsers: () => dispatch(actions.selectUsers())
+        onSelectUsers: () => dispatch(actions.selectUsers()),
+        onAddUserItem: () => dispatch(actions.addUserItem())
     }
 };
 

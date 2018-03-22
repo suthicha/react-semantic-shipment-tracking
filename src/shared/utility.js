@@ -44,3 +44,7 @@ export const guid = () => {
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
     s4() + '-' + s4() + s4() + s4();
 };
+
+export const randomNumber = () => {
+    return Math.floor(Math.random() * 99999) + Math.floor(Math.random());
+}
